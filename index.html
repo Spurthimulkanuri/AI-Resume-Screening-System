@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>AI Resume Screening</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            width: 60%;
+            margin: 40px auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            margin-top: 15px;
+            padding: 10px;
+            width: 100%;
+            background: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background: #2980b9;
+        }
+
+        .result {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 8px;
+        }
+
+        .selected {
+            background: #eafaf1;
+            color: #27ae60;
+            border-left: 5px solid #27ae60;
+        }
+
+        .not-selected {
+            background: #fdecea;
+            color: #e74c3c;
+            border-left: 5px solid #e74c3c;
+        }
+
+        .box {
+            margin-top: 15px;
+            padding: 10px;
+            background: #f8f9fa;
+            border-radius: 5px;
+        }
+
+        .label {
+            font-weight: bold;
+        }
+
+        ul {
+            padding-left: 20px;
+        }
+
+        li {
+            margin-bottom: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🤖 AI Resume Screening</h1>
+
+    <form method="POST" enctype="multipart/form-data">
+        <label class="label">Upload Resume</label>
+        <input type="file" name="resume" required>
+
+        <label class="label">Job Description</label>
+        <textarea name="jd" rows="6" placeholder="Paste Job Description here..." required></textarea>
+
+        <button type="submit">Analyze Resume</button>
+    </form>
+
+    {% if result %}
+        <div class="result {% if 'Selected' in result %}selected{% else %}not-selected{% endif %}">
+            <h3>{{ result }}</h3>
+        </div>
+
+        <!-- Resume Skills -->
+        <div class="box">
+            <p class="label">📄 Resume Skills</p>
+            <ul>
+                {% for skill in resume_skills %}
+                    <li>{{ skill }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <!-- JD Skills -->
+        <div class="box">
+            <p class="label">🎯 JD Skills</p>
+            <ul>
+                {% for skill in jd_skills %}
+                    <li>{{ skill }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <!-- ✅ Matched Skills -->
+        <div class="box">
+            <p class="label">✅ Matched Skills</p>
+            <ul>
+                {% for skill in matched %}
+                    <li>{{ skill }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <!-- ❌ Missing Skills -->
+        <div class="box">
+            <p class="label">❌ Missing Skills</p>
+            <ul>
+                {% for skill in missing %}
+                    <li>{{ skill }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <!-- Scores -->
+        <div class="box">
+            <p><span class="label">Skill Score:</span> {{ skill_score }}</p>
+            <p><span class="label">Semantic Score:</span> {{ semantic_score }}</p>
+        </div>
+    {% endif %}
+</div>
+
+</body>
+</html>
